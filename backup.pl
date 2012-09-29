@@ -31,7 +31,7 @@ if ($#ARGV != 0) {
     $shortdevice =~ s/\.colo-cation\.com$//;
     my $starttime = time();
 print "Backing up $sql->{devicename} to $sql->{volume}\n";
-    `/root/rootbackup.sh $sql->{devicename} $sql->{volume} $sql->{generations}`;
+    `/home/daviesinc/backups/rootbackup.sh $sql->{devicename} $sql->{volume} $sql->{generations}`;
     my $diskused = `du -sl --block-size=1M $sql->{volume}/$shortdevice|cut -f 1` * 1;
     my $endtime = time();
     my $elapsedtime = $endtime - $starttime;
