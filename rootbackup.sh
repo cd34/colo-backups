@@ -18,7 +18,7 @@ DATE=`date +%Y%m%d`
 RSYNC=/usr/bin/rsync
 
 # get paths
-PATHS=`ssh -o StrictHostKeyChecking=no root@$DEVICE "grep -vE '(^(#|$)|(bind|swap|auto|proc)|/tmp)' /etc/fstab"`
+PATHS=`ssh -o StrictHostKeyChecking=no root@$DEVICE "grep -vE '(^(#|$)|(tmpfs|bind|swap|auto|proc)|/tmp)' /etc/fstab"`
 
 loop=0
 for f in `ls -d1 $BACKUPPATH/$LOCALDEVICE/*`
@@ -55,6 +55,10 @@ do
   t=${dfline:${#fulldevice}}
   t2=${t#"${t%%[![:space:]]*}"}
   mntpoint=${t2%% *}
+  if [[ "$fulldevice" == UUID* ]]
+  then
+    device=${fulldevice#UUID=}
+  fi
 
   if [ -n "$LINKDEST" ]
   then
