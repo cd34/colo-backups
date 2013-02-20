@@ -50,14 +50,18 @@ for dfline in $PATHS
 do
 
   IFS=$' \t\n'
-  fulldevice=${dfline%% *}
+  fulldevice=${dfline%%[[:space:]]*}
   device=${fulldevice##*/}
   t=${dfline:${#fulldevice}}
   t2=${t#"${t%%[![:space:]]*}"}
-  mntpoint=${t2%% *}
+  mntpoint=${t2%%[[:space:]]*}
   if [[ "$fulldevice" == UUID* ]]
   then
-    device=${fulldevice#UUID=}
+    device=${mntpoint#/}
+    if [ -z "$device" ]
+    then
+      device='root'
+    fi
   fi
 
   if [ -n "$LINKDEST" ]
