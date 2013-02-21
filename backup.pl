@@ -47,9 +47,9 @@ sub record_backup_result {
   my $diskused = shift;
   my $elapsedtime = shift;
 
-  $dbh = DBI->connect("DBI:mysql:ccm:di1.mia.colo-cation.com", 
+  my $dbh = DBI->connect("DBI:mysql:ccm:di1.mia.colo-cation.com", 
                       "colobk", "cbk1cbk2");
-  $stk=$dbh->prepare("insert into cp_backup_history (device_id,mb_stored,elapsed_time) values (?,?,?)");
+  my $stk=$dbh->prepare("insert into cp_backup_history (device_id,mb_stored,elapsed_time) values (?,?,?)");
   $stk->execute($device_id,$diskused,$elapsedtime);
   $stk=$dbh->prepare("update cp_backups set last_backup=now(),mb_stored=? where device_id=?");
   $stk->execute($diskused,$device_id);
