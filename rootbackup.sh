@@ -5,6 +5,13 @@ LOCALDEVICE=`echo $1 | sed s/.colo-cation.com$//`
 BACKUPPATH=$2
 REVISIONS="0$3"
 
+if [[ $DEVICE =~ [a-z0-9-]+ ]] ; then
+  :
+else
+  echo Device $DEVICE is invalid
+  exit -1
+fi
+
 echo Backup of $DEVICE starting...
 
 if (( $REVISIONS < 2 ))
