@@ -82,7 +82,7 @@ do
   then
     DEST="$LINKDEST/$device/"
   fi
-  $RSYNC -e 'ssh -o StrictHostKeyChecking=no' -aplxo --delete --exclude 'log/apache*' --exclude 'log/nginx/*' --exclude 'tmp/*' --exclude 'lock/*' --exclude 'lib/php[45]/*' --exclude 'weblogs/*' --exclude 'colocation/*' $DEST root@$BACKUP_DEVICE:/$mntpoint/ $BACKUPPATH/$LOCALDEVICE/$DATE/$device/
+  $RSYNC -e 'ssh -o StrictHostKeyChecking=no' -aplxo --delete --exclude 'log/apache*' --exclude 'log/nginx/*' --exclude 'tmp/*' --exclude 'lock/*' --exclude 'lib/php[45]/*' --exclude 'weblogs/*' --exclude 'colocation/*' $DEST root@$BACKUP_DEVICE:$mntpoint/ $BACKUPPATH/$LOCALDEVICE/$DATE/$device/
 
 done
 
