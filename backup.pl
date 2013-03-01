@@ -16,7 +16,7 @@ use Data::Dumper;
     my $shortdevice = $sql->{devicename};
     $shortdevice =~ s/\.colo-cation\.com$//;
     my $lan_device = "";
-    if ($sql->{lan_backup} == "Y") {
+    if ($sql->{lan_backup} eq "Y") {
       ($lan_device,$junk) = split /\./, $shortdevice, 2;
       $lan_device .= '.local';
     }
