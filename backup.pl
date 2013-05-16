@@ -4,7 +4,7 @@ my $STORAGE_DEVICE_ID = 111;
 
 use DBI;
 use DBI::DBD;
-use Data::Dumper;
+#use Data::Dumper;
 
 
   ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
