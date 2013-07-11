@@ -23,18 +23,19 @@ use DBI::DBD;
     my $starttime = time();
 print "Backing up $sql->{devicename} to $sql->{volume}\n";
     `/home/daviesinc/backups/rootbackup.sh $sql->{devicename} $sql->{volume} $sql->{generations} $lan_device`;
-    my $diskused = `du -sl --block-size=1M $sql->{volume}/$shortdevice|cut -f 1` * 1;
+    #my $diskused = `du -sl --block-size=1M $sql->{volume}/$shortdevice|cut -f 1` * 1;
+    my $diskused = 0;
     my $endtime = time();
     my $elapsedtime = $endtime - $starttime;
 
-    #&record_backup_result($sql->{device_id},$diskused,$elapsedtime);
+    &record_backup_result($sql->{device_id},$diskused,$elapsedtime);
 
     ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
         localtime(time);
   }
 
 sub get_next_device {
-  my $dbh = DBI->connect("DBI:mysql:ccm:cp1.mia.colo-cation.com", "colobk", "cbk1cbk2");
+  my $dbh = DBI->connect("DBI:mysql:ccm:66.244.144.224", "colobk", "cbk1cbk2");
   my $stl = $dbh->prepare("lock tables cp_backups write,ccm_device read");
   $stl->execute();
   $stl = $dbh->prepare("select cp_backups.device_id,ccm_device.devicename,cp_backups.volume,cp_backups.storage_device,cp_backups.generations,cp_backups.lan_backup from cp_backups,ccm_device where cp_backups.storage_device_id=? and ((backup_days & b'10000000') or (backup_days & pow(2,dayofweek(curdate())-1))) and ((datediff(curdate(),cp_backups.last_backup) is null) or (datediff(curdate(),cp_backups.last_backup) > 6)) and cp_backups.device_id=ccm_device.device_id order by (backup_days & pow(2,dayofweek(curdate())-1) > 1) desc,last_backup limit 1");
@@ -52,7 +53,7 @@ sub record_backup_result {
   my $diskused = shift;
   my $elapsedtime = shift;
 
-  my $dbh = DBI->connect("DBI:mysql:ccm:cp1.mia.colo-cation.com", 
+  my $dbh = DBI->connect("DBI:mysql:ccm:66.244.144.224", 
                       "colobk", "cbk1cbk2");
   my $stk=$dbh->prepare("insert into cp_backup_history (device_id,mb_stored,elapsed_time) values (?,?,?)");
   $stk->execute($device_id,$diskused,$elapsedtime);
